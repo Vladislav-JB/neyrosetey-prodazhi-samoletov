@@ -1,31 +1,337 @@
 <!doctype html>
-<html lang="ru" data-stub>
+<html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Продажа самолётов · демо готовится</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Стратос — продажа бизнес-джетов с проверенной историей</title>
+<meta name="description" content="Демо-концепт сайта продажи самолётов: каталог бизнес-джетов с фильтрами, характеристики, сопровождение сделки.">
 <meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="120">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;600&display=swap">
+<meta property="og:title" content="Стратос — продажа бизнес-джетов">
+<meta property="og:description" content="Каталог самолётов с проверенной историей и сопровождение сделки под ключ.">
+<meta property="og:image" content="https://web-atelie.ru/neyrosetey-prodazhi-samoletov/assets/j1.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600;700&family=Carlito:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F6F3EE;--ink:#1F1E1C;--muted:#6B655C;--acc:#8A6737}
-@media (prefers-color-scheme:dark){:root{--bg:#161615;--ink:#EDE7DC;--muted:#A9A195;--acc:#C9A66B}}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Manrope,system-ui,sans-serif;display:grid;place-items:center;padding:24px}
-main{max-width:560px;text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center}
-.k{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);font-weight:600}
-h1{font:500 clamp(2rem,6vw,3rem)/1.1 "Cormorant Garamond",Georgia,serif;margin:0;text-wrap:balance}
-p{margin:0;color:var(--muted)}
-.bar{width:220px;height:3px;background:color-mix(in srgb,var(--acc) 20%,transparent);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;width:40%;background:var(--acc);animation:m 1.6s ease-in-out infinite}
-@keyframes m{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-@media (prefers-reduced-motion:reduce){.bar i{animation:none;width:60%}}
+:root{--bg:#0a0a0b;--bg2:#111113;--card:#141416;--line:rgba(255,255,255,.08);--tx:#ecebe8;--mut:#8b8a86;--acc:#c9b896;--r:4px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:16px/1.6 Manrope,system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+h1,h2,h3{font-family:Unbounded,sans-serif;font-weight:300;line-height:1.12;letter-spacing:-.01em}
+.lbl{font:600 11px Manrope;letter-spacing:.28em;text-transform:uppercase;color:var(--acc)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:600 13px Manrope;letter-spacing:.14em;text-transform:uppercase;padding:18px 30px;border-radius:var(--r);transition:background .25s,color .25s,border-color .25s}
+.btn--light{background:var(--tx);color:var(--bg)}.btn--light:hover{background:var(--acc)}
+.btn--line{border:1px solid rgba(255,255,255,.3)}.btn--line:hover{border-color:var(--acc);color:var(--acc)}
+/* единая обработка фото: приглушённый цвет, контраст, тёмная виньетка */
+.ph{position:relative;overflow:hidden;background:#000}
+.ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(.55) contrast(1.12) brightness(.82) sepia(.08);transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .5s}
+.ph:after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 45%,rgba(0,0,0,.55)),linear-gradient(180deg,transparent 55%,rgba(10,10,11,.6));pointer-events:none}
+
+.hdr{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.hdr.solid{background:rgba(10,10,11,.88);backdrop-filter:blur(14px);border-color:var(--line)}
+.hdr .wrap{display:flex;align-items:center;gap:40px;height:80px}
+.logo{font:400 18px Unbounded;letter-spacing:.32em;text-transform:uppercase}
+.logo span{color:var(--acc)}
+.nav{display:flex;gap:34px;margin-left:auto;font-size:14px;color:#bdbbb6}
+.nav a:hover{color:var(--tx)}
+.hdr .btn{padding:13px 20px;font-size:12px}
+.burger{display:none;margin-left:auto;width:44px;height:44px;position:relative}
+.burger span,.burger:before,.burger:after{content:"";position:absolute;left:10px;right:10px;height:1.5px;background:var(--tx)}
+.burger span{top:21px}.burger:before{top:15px}.burger:after{top:27px}
+.mnav{display:none;flex-direction:column;background:rgba(10,10,11,.97);border-top:1px solid var(--line);padding:8px 24px 22px}
+.mnav.on{display:flex}
+.mnav a{padding:14px 0;border-bottom:1px solid var(--line)}
+
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding-bottom:90px}
+.hero .ph{position:absolute;inset:0}
+.hero .ph img{object-position:50% 60%;filter:grayscale(.3) contrast(1.15) brightness(1.15)}
+.hero .ph:after{background:linear-gradient(180deg,rgba(10,10,11,.2) 0%,transparent 35%,rgba(10,10,11,.85) 100%)}
+.hero .wrap{position:relative;z-index:1;width:100%}
+.hero h1{font-size:clamp(34px,5.6vw,80px);max-width:960px;margin-top:22px}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero p{max-width:540px;color:#bdbbb6;font-size:18px;margin-top:24px}
+.hero__row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:40px;margin-top:44px}
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px}
+.facts{display:flex;gap:46px}
+.facts b{display:block;font:300 34px Unbounded}
+.facts span{font-size:13px;color:var(--mut)}
+
+section{padding:120px 0}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:48px}
+.sh h2{font-size:clamp(28px,3.6vw,48px);margin-top:16px;max-width:720px}
+.sh p{max-width:380px;color:var(--mut)}
+
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px}
+.chip{padding:10px 18px;border:1px solid var(--line);border-radius:40px;font-size:14px;color:#bdbbb6;transition:.2s}
+.chip:hover{border-color:rgba(255,255,255,.3);color:var(--tx)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.sort{margin-left:auto;background:var(--card);border:1px solid var(--line);border-radius:40px;padding:10px 18px;font-size:14px}
+.sort option{background:var(--card)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.jet{cursor:pointer;display:flex;flex-direction:column}
+.jet .ph{aspect-ratio:4/3;border-radius:var(--r)}
+.jet:hover .ph img{transform:scale(1.04);filter:grayscale(.2) contrast(1.12) brightness(.9)}
+.jet__tag{position:absolute;left:16px;top:16px;z-index:1;font:600 10.5px Manrope;letter-spacing:.2em;text-transform:uppercase;padding:6px 10px;border:1px solid rgba(255,255,255,.35);border-radius:30px;background:rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+.jet__b{padding:22px 2px 0;display:flex;flex-direction:column;gap:14px}
+.jet__top{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.jet h3{font-size:20px}
+.jet__price{font:400 17px Unbounded;color:var(--acc);white-space:nowrap}
+.spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.spec small{display:block;font-size:11px;color:var(--mut);letter-spacing:.06em;text-transform:uppercase}
+.spec b{font-weight:600;font-size:14.5px}
+.empty{grid-column:1/-1;padding:60px;text-align:center;color:var(--mut);border:1px dashed var(--line)}
+
+.cabin{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.cabin .ph{aspect-ratio:5/4;border-radius:var(--r)}
+.cabin h2{font-size:clamp(28px,3.4vw,44px);margin-top:16px}
+.cabin p{color:var(--mut);margin-top:20px}
+.list{list-style:none;margin-top:30px;border-top:1px solid var(--line)}
+.list li{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}
+.list span{color:var(--mut)}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.steps div{background:var(--bg);padding:34px 28px}
+.steps b{font:300 40px Unbounded;color:var(--acc)}
+.steps h3{font-size:17px;font-weight:400;margin-top:26px}
+.steps p{color:var(--mut);font-size:14.5px;margin-top:10px}
+
+.req{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.req .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.req h2{font-size:clamp(28px,3.4vw,44px);margin-top:16px}
+.req p{color:var(--mut);margin-top:18px;max-width:440px}
+.form{display:grid;gap:14px}
+.fld{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.2);padding:14px 0;font-size:16px;min-width:0}
+.fld:focus{outline:none;border-color:var(--acc)}
+.fld::placeholder{color:#6d6c69}
+select.fld option{background:var(--bg2)}
+.agree{font-size:13px;color:var(--mut)}
+.ok{display:none;padding:14px 16px;border:1px solid rgba(201,184,150,.4);color:var(--acc);font-size:14px}
+
+.foot{padding:60px 0 40px;font-size:14px;color:var(--mut)}
+.foot__t{display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px;padding-bottom:40px;border-bottom:1px solid var(--line)}
+.foot__t a{display:block;padding:3px 0}
+.foot__t a:hover{color:var(--tx)}
+.foot__b{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px;padding-top:28px}
+.foot__made{font-style:italic}
+.foot__made a{font-family:Calibri,Carlito,sans-serif;font-weight:700;font-style:italic;font-size:1.12em;margin-left:.3em;color:var(--tx)}
+.foot__made a:hover{text-decoration:underline}
+.foot__made img{display:inline;width:40px;height:52px;vertical-align:-7px;margin-left:6px}
+.foot__demo{flex-basis:100%;font-size:12.5px;color:#6d6c69}
+
+.ov{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line);width:min(980px,100%);max-height:calc(100vh - 32px);overflow:auto;display:grid;grid-template-columns:1.1fr .9fr;position:relative;border-radius:var(--r)}
+.modal .ph{min-height:420px}
+.modal__b{padding:40px 36px;display:flex;flex-direction:column;gap:18px}
+.modal h3{font-size:28px}
+.modal .tbl{display:grid;grid-template-columns:auto 1fr;gap:10px 22px;font-size:15px;border-top:1px solid var(--line);padding-top:18px}
+.modal .tbl span{color:var(--mut)}
+.x{position:absolute;right:14px;top:14px;z-index:3;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid var(--line);font-size:18px}
+
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:1000px){
+  .nav,.hdr .btn{display:none}.burger{display:block}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cabin,.req .wrap{grid-template-columns:1fr;gap:40px}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .modal{grid-template-columns:1fr}.modal .ph{min-height:260px}
+}
+@media (max-width:640px){
+  .wrap{padding:0 18px}
+  .hdr .wrap{height:66px}
+  .logo{font-size:15px;letter-spacing:.24em}
+  section{padding:80px 0}
+  .hero{padding-bottom:56px}
+  .hero p{font-size:16px}
+  .hero__cta,.hero__cta .btn{width:100%}
+  .facts{gap:26px;flex-wrap:wrap}
+  .facts b{font-size:26px}
+  .grid,.steps{grid-template-columns:1fr}
+  .spec{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sort{margin-left:0;width:100%}
+  .modal__b{padding:28px 22px}
+  .btn{white-space:normal;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
-<body><main>
-<div class="k">Демо-версия по вашему ТЗ</div>
-<h1>Продажа самолётов</h1>
-<div class="bar" aria-hidden="true"><i></i></div>
-<p>Сайт сейчас собирается по вашему техническому заданию.<br>Будет готов сегодня к <b>12:54</b> – по этой же ссылке.</p>
-<p style="font-size:.85rem">Страница обновится сама.</p>
-</main></body></html>
+<body>
+
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top">Страт<span>о</span>с</a>
+    <nav class="nav"><a href="#catalog">Самолёты</a><a href="#cabin">Как выбрать</a><a href="#deal">Сделка</a><a href="#request">Контакты</a></nav>
+    <a class="btn btn--line" href="#request">Подобрать самолёт</a>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span></button>
+  </div>
+  <nav class="mnav" id="mnav"><a href="#catalog">Самолёты</a><a href="#cabin">Как выбрать</a><a href="#deal">Сделка</a><a href="#request">Подобрать самолёт</a></nav>
+</header>
+
+<main id="top">
+<section class="hero" style="padding-top:0">
+  <div class="ph"><img src="assets/hero.webp" alt="Силуэт бизнес-джета в тёмном ангаре" fetchpriority="high"></div>
+  <div class="wrap">
+    <span class="lbl">Продажа бизнес-джетов</span>
+    <h1>Самолёт, который <em>уже проверен</em> — до вашей подписи</h1>
+    <p>Подбираем бизнес-джеты на вторичном рынке, проводим техническую экспертизу и сопровождаем сделку до перегона самолёта к вам.</p>
+    <div class="hero__row">
+      <div class="hero__cta"><a class="btn btn--light" href="#catalog">Смотреть самолёты</a><a class="btn btn--line" href="#request">Подобрать под задачу</a></div>
+      <div class="facts"><div><b id="fN">9</b><span>самолётов в продаже</span></div><div><b>120+</b><span>проверок истории</span></div><div><b>45 дней</b><span>средняя сделка</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog"><div class="wrap">
+  <div class="sh rv"><div><span class="lbl">Каталог</span><h2>Самолёты в продаже</h2></div><p>Каждый борт — с полной историей обслуживания и отчётом независимой проверки перед покупкой.</p></div>
+  <div class="filters rv" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="cabin" style="padding-top:0"><div class="wrap">
+  <div class="cabin">
+    <div class="ph rv"><img src="assets/cabin.webp" alt="Салон бизнес-джета" loading="lazy"></div>
+    <div class="rv">
+      <span class="lbl">Как выбрать</span>
+      <h2>Под маршрут, а не под каталог</h2>
+      <p>Начинаем с ваших задач: откуда и куда вы летаете, сколько пассажиров, как часто. Под это подбираем класс самолёта и бюджет владения — а не только цену покупки.</p>
+      <ul class="list">
+        <li><span>Лёгкий джет</span>до 2 500 км · 6–7 мест</li>
+        <li><span>Средний класс</span>до 6 000 км · 8–10 мест</li>
+        <li><span>Тяжёлый, дальнемагистральный</span>до 12 000 км · 12–16 мест</li>
+        <li><span>Турбовинтовой</span>короткие полосы · 6–9 мест</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="deal" style="padding-top:0"><div class="wrap">
+  <div class="sh rv"><div><span class="lbl">Сделка под ключ</span><h2>Четыре шага до ключей от самолёта</h2></div></div>
+  <div class="steps rv">
+    <div><b>01</b><h3>Подбор</h3><p>Ищем борта под ваш маршрут и бюджет, включая предложения не в открытой продаже.</p></div>
+    <div><b>02</b><h3>Проверка</h3><p>Независимая техническая экспертиза, история обслуживания, юридическая чистота.</p></div>
+    <div><b>03</b><h3>Сделка</h3><p>Договор, расчёты через безопасный счёт, регистрация и страхование.</p></div>
+    <div><b>04</b><h3>Перегон</h3><p>Экипаж перегоняет самолёт в ваш аэропорт, помогаем с размещением и обслуживанием.</p></div>
+  </div>
+</div></section>
+
+<section class="req" id="request"><div class="wrap">
+  <div class="rv">
+    <span class="lbl">Заявка</span>
+    <h2>Расскажите о задаче — пришлём подборку</h2>
+    <p>Менеджер свяжется в течение часа, уточнит маршрут и бюджет и пришлёт 3–5 подходящих самолётов со спецификациями.</p>
+  </div>
+  <form class="form rv" id="reqForm" novalidate>
+    <input class="fld" name="name" placeholder="Ваше имя">
+    <input class="fld" name="phone" type="tel" placeholder="+7 (___) ___-__-__">
+    <select class="fld" name="cls" id="reqCls"><option value="">Какой самолёт интересует</option><option>Лёгкий джет</option><option>Средний класс</option><option>Тяжёлый джет</option><option>Турбовинтовой</option><option>Пока не знаю</option></select>
+    <input class="fld" name="route" placeholder="Типичный маршрут, например Москва — Дубай">
+    <label class="agree"><input type="checkbox" checked> Согласен на обработку персональных данных</label>
+    <button class="btn btn--light" type="submit">Получить подборку</button>
+    <div class="ok" id="okReq">Спасибо! Это демо — заявка никуда не отправлена.</div>
+  </form>
+</div></section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <div class="foot__t">
+    <a class="logo" href="#top">Страт<span>о</span>с</a>
+    <div><a href="#catalog">Самолёты</a><a href="#cabin">Как выбрать</a><a href="#deal">Сделка</a></div>
+    <div><a href="tel:+79000000000">+7 (900) 000-00-00</a><a href="#request">sales@example.ru</a></div>
+  </div>
+  <div class="foot__b">
+    <span>© Стратос, 2026</span>
+    <span class="foot__made">Создан в <a href="https://web-atelie.ru/">«Веб-Ателье»</a><img src="assets/web-atelie.png" alt=""></span>
+    <span class="foot__demo">Демо-концепт сайта продажи самолётов. Название, контакты, борта, цены и налёт условные, фото — из стоковой библиотеки с единой обработкой и не соответствуют конкретным моделям.</span>
+  </div>
+</div></footer>
+
+<div class="ov" id="ov"><div class="modal" role="dialog" aria-modal="true" id="modal"></div></div>
+
+<script>
+const $ = id => document.getElementById(id);
+// [id, модель, класс, год, налёт ч, мест, дальность км, цена $ млн (0 = по запросу), фото, метка]
+const JETS = [
+  ['g450','Gulfstream G450','heavy',2012,4850,14,8060,13.9,'j1','Новое поступление'],
+  ['ch605','Bombardier Challenger 605','mid',2014,3200,10,7400,11.5,'j2',''],
+  ['f2000','Dassault Falcon 2000LX','mid',2011,5100,10,7400,9.8,'j3',''],
+  ['g6000','Bombardier Global 6000','heavy',2016,2600,14,11100,0,'j4','Эксклюзив'],
+  ['ph300','Embraer Phenom 300E','light',2019,1150,7,3720,8.2,'j5',''],
+  ['cxls','Cessna Citation XLS+','light',2015,2900,8,3440,6.4,'j6','Снижена цена'],
+  ['g550','Gulfstream G550','heavy',2010,6200,16,12500,15.5,'j7',''],
+  ['l75','Learjet 75','light',2017,1800,7,3780,5.9,'j8',''],
+  ['pc12','Pilatus PC-12 NGX','turbo',2021,640,9,3400,6.1,'j9','Турбовинтовой']
+];
+const CLS = [['','Все'],['light','Лёгкие'],['mid','Средние'],['heavy','Тяжёлые'],['turbo','Турбовинтовые']];
+const clsName = {light:'Лёгкий джет', mid:'Средний класс', heavy:'Тяжёлый джет', turbo:'Турбовинтовой'};
+let st = {cls:'', sort:'new'};
+const money = v => v ? '$' + String(v).replace('.', ',') + ' млн' : 'По запросу';
+const num = n => n.toLocaleString('ru-RU');
+
+function renderFilters(){
+  $('filters').innerHTML = CLS.map(([k, n]) => `<button class="chip${st.cls === k ? ' on' : ''}" data-cls="${k}">${n}</button>`).join('') +
+    `<select class="sort" id="sort" aria-label="Сортировка"><option value="new">Сначала новые</option><option value="pa">Цена по возрастанию</option><option value="pd">Цена по убыванию</option><option value="range">Дальность</option></select>`;
+  $('sort').value = st.sort;
+  $('sort').onchange = e => { st.sort = e.target.value; renderGrid(); };
+}
+function renderGrid(){
+  let a = JETS.filter(j => !st.cls || j[2] === st.cls);
+  const price = j => j[7] || 99;
+  a = a.slice().sort({new:(x,y)=>y[3]-x[3], pa:(x,y)=>price(x)-price(y), pd:(x,y)=>price(y)-price(x), range:(x,y)=>y[6]-x[6]}[st.sort]);
+  $('grid').innerHTML = a.length ? a.map(j => `<article class="jet" data-open="${j[0]}" tabindex="0">
+    <div class="ph"><img src="assets/${j[8]}.webp" alt="${j[1]}" loading="lazy">${j[9] ? `<span class="jet__tag">${j[9]}</span>` : ''}</div>
+    <div class="jet__b"><div class="jet__top"><h3>${j[1]}</h3><span class="jet__price">${money(j[7])}</span></div>
+    <div class="spec"><div><small>Год</small><b>${j[3]}</b></div><div><small>Налёт</small><b>${num(j[4])} ч</b></div><div><small>Мест</small><b>${j[5]}</b></div><div><small>Дальность</small><b>${num(j[6])} км</b></div></div></div></article>`).join('')
+    : '<div class="empty">В этом классе сейчас нет самолётов — оставьте заявку, найдём под запрос.</div>';
+  $('fN').textContent = JETS.length;
+}
+function openJet(id){
+  const j = JETS.find(x => x[0] === id); if (!j) return;
+  $('modal').innerHTML = `<button class="x" data-close aria-label="Закрыть">✕</button><div class="ph"><img src="assets/${j[8]}.webp" alt="${j[1]}"></div>
+    <div class="modal__b"><span class="lbl">${clsName[j[2]]}</span><h3>${j[1]}</h3><div class="jet__price" style="font-size:22px">${money(j[7])}</div>
+    <div class="tbl"><span>Год выпуска</span><b>${j[3]}</b><span>Налёт</span><b>${num(j[4])} ч</b><span>Пассажиров</span><b>до ${j[5]}</b><span>Дальность</span><b>${num(j[6])} км</b><span>Обслуживание</span><b>по программе производителя</b><span>Состояние</span><b>отчёт независимой проверки</b></div>
+    <a class="btn btn--light" href="#request" data-req="${j[2]}">Запросить спецификацию</a></div>`;
+  $('ov').classList.add('on');
+}
+function close(){ $('ov').classList.remove('on'); }
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-cls],[data-open],[data-close],[data-req],.mnav a');
+  if (!t) return;
+  if (t.dataset.cls !== undefined){ st.cls = t.dataset.cls; renderFilters(); renderGrid(); }
+  else if (t.dataset.open){ openJet(t.dataset.open); }
+  else if (t.dataset.close !== undefined){ close(); }
+  else if (t.dataset.req){ $('reqCls').value = clsName[t.dataset.req]; close(); }
+  else if (t.matches('.mnav a')){ $('mnav').classList.remove('on'); $('burger').setAttribute('aria-expanded','false'); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); if (e.key === 'Enter' && e.target.dataset && e.target.dataset.open) openJet(e.target.dataset.open); });
+$('ov').addEventListener('click', e => { if (e.target === $('ov')) close(); });
+$('burger').onclick = () => { const on = $('mnav').classList.toggle('on'); $('burger').setAttribute('aria-expanded', on); $('hdr').classList.add('solid'); };
+const onScroll = () => $('hdr').classList.toggle('solid', scrollY > 40 || $('mnav').classList.contains('on'));
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+document.querySelectorAll('input[type=tel]').forEach(inp => inp.addEventListener('input', () => {
+  let d = inp.value.replace(/\D/g, ''); if (d[0] === '8') d = '7' + d.slice(1); if (d && d[0] !== '7') d = '7' + d; d = d.slice(0, 11);
+  inp.value = d.length > 1 ? '+7 (' + d.slice(1, 4) + (d.length > 4 ? ') ' + d.slice(4, 7) : '') + (d.length > 7 ? '-' + d.slice(7, 9) : '') + (d.length > 9 ? '-' + d.slice(9, 11) : '') : d ? '+7' : '';
+}));
+$('reqForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, ph = f.phone, nm = f.name; let bad = false;
+  [nm, ph].forEach(x => { const v = x === ph ? x.value.replace(/\D/g, '').length === 11 : x.value.trim().length > 1; x.style.borderColor = v ? '' : '#c9b896'; if (!v) bad = true; });
+  if (bad) return;
+  $('okReq').style.display = 'block'; f.querySelector('[type=submit]').disabled = true;
+});
+
+// плавное появление блоков при прокрутке
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }), {threshold:.12}) : null;
+document.querySelectorAll('.rv').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+
+renderFilters(); renderGrid();
+</script>
+</body>
+</html>
